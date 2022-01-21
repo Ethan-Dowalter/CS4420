@@ -1,0 +1,18 @@
+Wed_Sep_22_15:31:49_EDT_2021
+
+echo "All of these redirections are valid"
+
+cat  < i
+cat  > o
+cat  >> O
+cat 2> e
+cat 2>> E
+
+cat 2> e  > o
+cat 2>> E  > o
+cat  < i 2> e
+cat  < i  > o
+
+cat < i 2> e  > o 
+cat < i 2>> E  > o 
+cat < i 2> e  >> O

@@ -1,0 +1,7 @@
+Wed_Sep_22_15:31:49_EDT_2021
+echo Hello World
+/bin/cat < /etc/motd
+/bin/cat > outfile
+echo "this is a test" | cat
+gcc -c -Wall file.c 2>> ERRS
+cat < infile | tr "a-z" "A-Z" | cat 2>caterrs | wc -l > out

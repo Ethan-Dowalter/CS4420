@@ -1,0 +1,22 @@
+Wed_Sep_22_15:31:49_EDT_2021
+echo "This file contains errors"
+
+echo "What if" "the quotes" "don't match up?
+
+echo "I am a valid command and should appear!!"
+
+echo "What if" they look like this?"
+
+a|b|
+
+a | | c
+
+a | b < i > o | c
+
+echo "OK, how about this?" > & error
+
+echo "And this" > > out
+
+echo strange >>> stranger
+
+echo "This last command is valid!"

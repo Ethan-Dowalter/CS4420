@@ -1,0 +1,425 @@
+Grammar
+
+    0 $accept: input $end
+
+    1 input: lines
+    2      | %empty
+
+    3 lines: oneline
+    4      | oneline lines
+
+    5 $@1: %empty
+
+    6 oneline: line $@1 eoln
+    7        | eoln
+    8        | error eoln
+
+    9 eoln: EOLN
+
+   10 line: cmd
+   11     | cmd PIPE line
+
+   12 cmd: WORD args optredir
+
+   13 args: arg args
+   14     | %empty
+
+   15 arg: WORD
+
+   16 optredir: INPUT WORD optredir
+   17         | OUTPUT WORD optredir
+   18         | OUTPUT_APPEND WORD optredir
+   19         | ERROUT WORD optredir
+   20         | ERROUT_APPEND WORD optredir
+   21         | %empty
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256) 8
+EOLN (258) 9
+PIPE (259) 11
+INPUT (260) 16
+OUTPUT (261) 17
+OUTPUT_APPEND (262) 18
+ERROUT (263) 19
+ERROUT_APPEND (264) 20
+WORD (265) 12 15 16 17 18 19 20
+
+
+Nonterminals, with rules where they appear
+
+$accept (11)
+    on left: 0
+input (12)
+    on left: 1 2, on right: 0
+lines (13)
+    on left: 3 4, on right: 1 4
+oneline (14)
+    on left: 6 7 8, on right: 3 4
+$@1 (15)
+    on left: 5, on right: 6
+eoln (16)
+    on left: 9, on right: 6 7 8
+line (17)
+    on left: 10 11, on right: 6 11
+cmd (18)
+    on left: 12, on right: 10 11
+args (19)
+    on left: 13 14, on right: 12 13
+arg (20)
+    on left: 15, on right: 13
+optredir (21)
+    on left: 16 17 18 19 20 21, on right: 12 16 17 18 19 20
+
+
+State 0
+
+    0 $accept: . input $end
+
+    error  shift, and go to state 1
+    EOLN   shift, and go to state 2
+    WORD   shift, and go to state 3
+
+    $end  reduce using rule 2 (input)
+
+    input    go to state 4
+    lines    go to state 5
+    oneline  go to state 6
+    eoln     go to state 7
+    line     go to state 8
+    cmd      go to state 9
+
+
+State 1
+
+    8 oneline: error . eoln
+
+    EOLN  shift, and go to state 2
+
+    eoln  go to state 10
+
+
+State 2
+
+    9 eoln: EOLN .
+
+    $default  reduce using rule 9 (eoln)
+
+
+State 3
+
+   12 cmd: WORD . args optredir
+
+    WORD  shift, and go to state 11
+
+    $default  reduce using rule 14 (args)
+
+    args  go to state 12
+    arg   go to state 13
+
+
+State 4
+
+    0 $accept: input . $end
+
+    $end  shift, and go to state 14
+
+
+State 5
+
+    1 input: lines .
+
+    $default  reduce using rule 1 (input)
+
+
+State 6
+
+    3 lines: oneline .
+    4      | oneline . lines
+
+    error  shift, and go to state 1
+    EOLN   shift, and go to state 2
+    WORD   shift, and go to state 3
+
+    $end  reduce using rule 3 (lines)
+
+    lines    go to state 15
+    oneline  go to state 6
+    eoln     go to state 7
+    line     go to state 8
+    cmd      go to state 9
+
+
+State 7
+
+    7 oneline: eoln .
+
+    $default  reduce using rule 7 (oneline)
+
+
+State 8
+
+    6 oneline: line . $@1 eoln
+
+    $default  reduce using rule 5 ($@1)
+
+    $@1  go to state 16
+
+
+State 9
+
+   10 line: cmd .
+   11     | cmd . PIPE line
+
+    PIPE  shift, and go to state 17
+
+    $default  reduce using rule 10 (line)
+
+
+State 10
+
+    8 oneline: error eoln .
+
+    $default  reduce using rule 8 (oneline)
+
+
+State 11
+
+   15 arg: WORD .
+
+    $default  reduce using rule 15 (arg)
+
+
+State 12
+
+   12 cmd: WORD args . optredir
+
+    INPUT          shift, and go to state 18
+    OUTPUT         shift, and go to state 19
+    OUTPUT_APPEND  shift, and go to state 20
+    ERROUT         shift, and go to state 21
+    ERROUT_APPEND  shift, and go to state 22
+
+    $default  reduce using rule 21 (optredir)
+
+    optredir  go to state 23
+
+
+State 13
+
+   13 args: arg . args
+
+    WORD  shift, and go to state 11
+
+    $default  reduce using rule 14 (args)
+
+    args  go to state 24
+    arg   go to state 13
+
+
+State 14
+
+    0 $accept: input $end .
+
+    $default  accept
+
+
+State 15
+
+    4 lines: oneline lines .
+
+    $default  reduce using rule 4 (lines)
+
+
+State 16
+
+    6 oneline: line $@1 . eoln
+
+    EOLN  shift, and go to state 2
+
+    eoln  go to state 25
+
+
+State 17
+
+   11 line: cmd PIPE . line
+
+    WORD  shift, and go to state 3
+
+    line  go to state 26
+    cmd   go to state 9
+
+
+State 18
+
+   16 optredir: INPUT . WORD optredir
+
+    WORD  shift, and go to state 27
+
+
+State 19
+
+   17 optredir: OUTPUT . WORD optredir
+
+    WORD  shift, and go to state 28
+
+
+State 20
+
+   18 optredir: OUTPUT_APPEND . WORD optredir
+
+    WORD  shift, and go to state 29
+
+
+State 21
+
+   19 optredir: ERROUT . WORD optredir
+
+    WORD  shift, and go to state 30
+
+
+State 22
+
+   20 optredir: ERROUT_APPEND . WORD optredir
+
+    WORD  shift, and go to state 31
+
+
+State 23
+
+   12 cmd: WORD args optredir .
+
+    $default  reduce using rule 12 (cmd)
+
+
+State 24
+
+   13 args: arg args .
+
+    $default  reduce using rule 13 (args)
+
+
+State 25
+
+    6 oneline: line $@1 eoln .
+
+    $default  reduce using rule 6 (oneline)
+
+
+State 26
+
+   11 line: cmd PIPE line .
+
+    $default  reduce using rule 11 (line)
+
+
+State 27
+
+   16 optredir: INPUT WORD . optredir
+
+    INPUT          shift, and go to state 18
+    OUTPUT         shift, and go to state 19
+    OUTPUT_APPEND  shift, and go to state 20
+    ERROUT         shift, and go to state 21
+    ERROUT_APPEND  shift, and go to state 22
+
+    $default  reduce using rule 21 (optredir)
+
+    optredir  go to state 32
+
+
+State 28
+
+   17 optredir: OUTPUT WORD . optredir
+
+    INPUT          shift, and go to state 18
+    OUTPUT         shift, and go to state 19
+    OUTPUT_APPEND  shift, and go to state 20
+    ERROUT         shift, and go to state 21
+    ERROUT_APPEND  shift, and go to state 22
+
+    $default  reduce using rule 21 (optredir)
+
+    optredir  go to state 33
+
+
+State 29
+
+   18 optredir: OUTPUT_APPEND WORD . optredir
+
+    INPUT          shift, and go to state 18
+    OUTPUT         shift, and go to state 19
+    OUTPUT_APPEND  shift, and go to state 20
+    ERROUT         shift, and go to state 21
+    ERROUT_APPEND  shift, and go to state 22
+
+    $default  reduce using rule 21 (optredir)
+
+    optredir  go to state 34
+
+
+State 30
+
+   19 optredir: ERROUT WORD . optredir
+
+    INPUT          shift, and go to state 18
+    OUTPUT         shift, and go to state 19
+    OUTPUT_APPEND  shift, and go to state 20
+    ERROUT         shift, and go to state 21
+    ERROUT_APPEND  shift, and go to state 22
+
+    $default  reduce using rule 21 (optredir)
+
+    optredir  go to state 35
+
+
+State 31
+
+   20 optredir: ERROUT_APPEND WORD . optredir
+
+    INPUT          shift, and go to state 18
+    OUTPUT         shift, and go to state 19
+    OUTPUT_APPEND  shift, and go to state 20
+    ERROUT         shift, and go to state 21
+    ERROUT_APPEND  shift, and go to state 22
+
+    $default  reduce using rule 21 (optredir)
+
+    optredir  go to state 36
+
+
+State 32
+
+   16 optredir: INPUT WORD optredir .
+
+    $default  reduce using rule 16 (optredir)
+
+
+State 33
+
+   17 optredir: OUTPUT WORD optredir .
+
+    $default  reduce using rule 17 (optredir)
+
+
+State 34
+
+   18 optredir: OUTPUT_APPEND WORD optredir .
+
+    $default  reduce using rule 18 (optredir)
+
+
+State 35
+
+   19 optredir: ERROUT WORD optredir .
+
+    $default  reduce using rule 19 (optredir)
+
+
+State 36
+
+   20 optredir: ERROUT_APPEND WORD optredir .
+
+    $default  reduce using rule 20 (optredir)

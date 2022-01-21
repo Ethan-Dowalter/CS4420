@@ -1,0 +1,19 @@
+Wed_Sep_22_15:31:49_EDT_2021
+S
+echo "All of these commands have fatal errors"
+
+cat < i < i
+
+cat > o > o
+
+cat > o >> O
+
+cat 2> e 2> e
+
+cat 2> e 2>> E
+
+cat < i > o < i2 > o2
+
+a < i | b < i2 | c < i3 | d < i4
+
+a > o | b > o2 | c > o3 | d > O4

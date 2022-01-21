@@ -1,0 +1,20 @@
+Wed_Sep_22_15:31:49_EDT_2021
+
+echo "All of these commands must generate warnings at least"
+echo "You may, however, choose to allow them if you wish"
+
+cat  > o 2> e
+
+cat < i  > o 2> e 
+
+cat > o < i
+
+cat 2> e < i
+
+cat > o < i 2> e 
+
+cat > o 2> e < i 
+
+cat 2> e < i > o 
+
+cat 2> e > o < i 

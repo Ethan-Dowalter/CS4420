@@ -1,0 +1,251 @@
+Grammar
+
+    0 $accept: input $end
+
+    1 input: lines
+    2      | %empty
+
+    3 lines: oneline EOLN
+    4      | oneline EOLN lines
+
+    5 oneline: line
+    6        | error
+
+    7 line: expr
+    8     | expr SEMI line
+
+    9 expr: VARIABLE ASSIGN rhs
+
+   10 rhs: NUMBER
+   11    | NUMBER oper rhs
+
+   12 oper: PLUS
+   13     | MINUS
+   14     | TIMES
+   15     | DIVIDE
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256) 6
+EOLN (258) 3 4
+SEMI (259) 8
+PLUS (260) 12
+MINUS (261) 13
+TIMES (262) 14
+DIVIDE (263) 15
+ASSIGN (264) 9
+VARIABLE (265) 9
+NUMBER (266) 10 11
+
+
+Nonterminals, with rules where they appear
+
+$accept (12)
+    on left: 0
+input (13)
+    on left: 1 2, on right: 0
+lines (14)
+    on left: 3 4, on right: 1 4
+oneline (15)
+    on left: 5 6, on right: 3 4
+line (16)
+    on left: 7 8, on right: 5 8
+expr (17)
+    on left: 9, on right: 7 8
+rhs (18)
+    on left: 10 11, on right: 9 11
+oper (19)
+    on left: 12 13 14 15, on right: 11
+
+
+State 0
+
+    0 $accept: . input $end
+
+    error     shift, and go to state 1
+    VARIABLE  shift, and go to state 2
+
+    $end  reduce using rule 2 (input)
+
+    input    go to state 3
+    lines    go to state 4
+    oneline  go to state 5
+    line     go to state 6
+    expr     go to state 7
+
+
+State 1
+
+    6 oneline: error .
+
+    $default  reduce using rule 6 (oneline)
+
+
+State 2
+
+    9 expr: VARIABLE . ASSIGN rhs
+
+    ASSIGN  shift, and go to state 8
+
+
+State 3
+
+    0 $accept: input . $end
+
+    $end  shift, and go to state 9
+
+
+State 4
+
+    1 input: lines .
+
+    $default  reduce using rule 1 (input)
+
+
+State 5
+
+    3 lines: oneline . EOLN
+    4      | oneline . EOLN lines
+
+    EOLN  shift, and go to state 10
+
+
+State 6
+
+    5 oneline: line .
+
+    $default  reduce using rule 5 (oneline)
+
+
+State 7
+
+    7 line: expr .
+    8     | expr . SEMI line
+
+    SEMI  shift, and go to state 11
+
+    $default  reduce using rule 7 (line)
+
+
+State 8
+
+    9 expr: VARIABLE ASSIGN . rhs
+
+    NUMBER  shift, and go to state 12
+
+    rhs  go to state 13
+
+
+State 9
+
+    0 $accept: input $end .
+
+    $default  accept
+
+
+State 10
+
+    3 lines: oneline EOLN .
+    4      | oneline EOLN . lines
+
+    error     shift, and go to state 1
+    VARIABLE  shift, and go to state 2
+
+    $end  reduce using rule 3 (lines)
+
+    lines    go to state 14
+    oneline  go to state 5
+    line     go to state 6
+    expr     go to state 7
+
+
+State 11
+
+    8 line: expr SEMI . line
+
+    VARIABLE  shift, and go to state 2
+
+    line  go to state 15
+    expr  go to state 7
+
+
+State 12
+
+   10 rhs: NUMBER .
+   11    | NUMBER . oper rhs
+
+    PLUS    shift, and go to state 16
+    MINUS   shift, and go to state 17
+    TIMES   shift, and go to state 18
+    DIVIDE  shift, and go to state 19
+
+    $default  reduce using rule 10 (rhs)
+
+    oper  go to state 20
+
+
+State 13
+
+    9 expr: VARIABLE ASSIGN rhs .
+
+    $default  reduce using rule 9 (expr)
+
+
+State 14
+
+    4 lines: oneline EOLN lines .
+
+    $default  reduce using rule 4 (lines)
+
+
+State 15
+
+    8 line: expr SEMI line .
+
+    $default  reduce using rule 8 (line)
+
+
+State 16
+
+   12 oper: PLUS .
+
+    $default  reduce using rule 12 (oper)
+
+
+State 17
+
+   13 oper: MINUS .
+
+    $default  reduce using rule 13 (oper)
+
+
+State 18
+
+   14 oper: TIMES .
+
+    $default  reduce using rule 14 (oper)
+
+
+State 19
+
+   15 oper: DIVIDE .
+
+    $default  reduce using rule 15 (oper)
+
+
+State 20
+
+   11 rhs: NUMBER oper . rhs
+
+    NUMBER  shift, and go to state 12
+
+    rhs  go to state 21
+
+
+State 21
+
+   11 rhs: NUMBER oper rhs .
+
+    $default  reduce using rule 11 (rhs)
