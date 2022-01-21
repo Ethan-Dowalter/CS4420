@@ -1,0 +1,1073 @@
+State 0 conflicts: 1 reduce/reduce
+State 4 conflicts: 1 shift/reduce
+State 7 conflicts: 1 shift/reduce
+State 8 conflicts: 1 shift/reduce
+State 9 conflicts: 2 reduce/reduce
+State 10 conflicts: 2 reduce/reduce
+State 22 conflicts: 2 reduce/reduce
+State 33 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: input $end
+
+    1 input: lines
+    2      | %empty
+
+    3 lines: oneline lines
+    4      | forloop lines
+    5      | whileloop lines
+    6      | %empty
+
+    7 forloop: FOR WORD IN loopargs eoln DO eoln metacmdlist DONE eoln
+
+    8 whileloop: WHILE metacmdlist DO eoln metacmdlist DONE eoln
+
+    9 oneline: chdir eoln
+   10        | assignment eoln
+
+   11 $@1: %empty
+
+   12 oneline: EXPORT args variable $@1 eoln
+
+   13 $@2: %empty
+
+   14 oneline: line $@2 eoln
+   15        | eoln
+   16        | error eoln
+
+   17 eoln: EOLN
+   18     | SEMICOLON EOLN
+   19     | SEMICOLON
+
+   20 line: cmd
+   21     | cmd PIPE line
+
+   22 variable: WORD
+   23         | assignment
+
+   24 assignment: VAR
+   25           | VAREXPAND
+   26           | VAR args
+   27           | VAREXPAND args
+
+   28 chdir: CD
+   29      | CD WORD
+   30      | CD WORD args
+
+   31 metacmdlist: metacmd eoln metacmdlist
+   32            | %empty
+
+   33 metacmd: cmd
+   34        | whileloop
+   35        | forloop
+   36        | assignment
+
+   37 cmd: WORD args optredir
+   38    | WORD args optredir cmd
+
+   39 loopargs: arg loopargs
+   40         | arg
+
+   41 args: arg args
+   42     | %empty
+
+   43 arg: WORD
+
+   44 optredir: INPUT WORD optredir
+   45         | OUTPUT WORD optredir
+   46         | OUTPUT_APPEND WORD optredir
+   47         | ERROUT WORD optredir
+   48         | ERROUT_APPEND WORD optredir
+   49         | %empty
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256) 16
+EOLN (258) 17 18
+PIPE (259) 21
+INPUT (260) 44
+CD (261) 28 29 30
+SEMICOLON (262) 18 19
+FOR (263) 7
+WHILE (264) 8
+IN (265) 7
+DO (266) 7 8
+DONE (267) 7 8
+EXPORT (268) 12
+OUTPUT (269) 45
+OUTPUT_APPEND (270) 46
+ERROUT (271) 47
+ERROUT_APPEND (272) 48
+WORD (273) 7 22 29 30 37 38 43 44 45 46 47 48
+VAR (274) 24 26
+VAREXPAND (275) 25 27
+
+
+Nonterminals, with rules where they appear
+
+$accept (21)
+    on left: 0
+input (22)
+    on left: 1 2, on right: 0
+lines (23)
+    on left: 3 4 5 6, on right: 1 3 4 5
+forloop (24)
+    on left: 7, on right: 4 35
+whileloop (25)
+    on left: 8, on right: 5 34
+oneline (26)
+    on left: 9 10 12 14 15 16, on right: 3
+$@1 (27)
+    on left: 11, on right: 12
+$@2 (28)
+    on left: 13, on right: 14
+eoln (29)
+    on left: 17 18 19, on right: 7 8 9 10 12 14 15 16 31
+line (30)
+    on left: 20 21, on right: 14 21
+variable (31)
+    on left: 22 23, on right: 12
+assignment (32)
+    on left: 24 25 26 27, on right: 10 23 36
+chdir (33)
+    on left: 28 29 30, on right: 9
+metacmdlist (34)
+    on left: 31 32, on right: 7 8 31
+metacmd (35)
+    on left: 33 34 35 36, on right: 31
+cmd (36)
+    on left: 37 38, on right: 20 21 33 38
+loopargs (37)
+    on left: 39 40, on right: 7 39
+args (38)
+    on left: 41 42, on right: 12 26 27 30 37 38 41
+arg (39)
+    on left: 43, on right: 39 40 41
+optredir (40)
+    on left: 44 45 46 47 48 49, on right: 37 38 44 45 46 47 48
+
+
+State 0
+
+    0 $accept: . input $end
+
+    error      shift, and go to state 1
+    EOLN       shift, and go to state 2
+    CD         shift, and go to state 3
+    SEMICOLON  shift, and go to state 4
+    FOR        shift, and go to state 5
+    WHILE      shift, and go to state 6
+    EXPORT     shift, and go to state 7
+    WORD       shift, and go to state 8
+    VAR        shift, and go to state 9
+    VAREXPAND  shift, and go to state 10
+
+    $end  reduce using rule 2 (input)
+    $end  [reduce using rule 6 (lines)]
+
+    input       go to state 11
+    lines       go to state 12
+    forloop     go to state 13
+    whileloop   go to state 14
+    oneline     go to state 15
+    eoln        go to state 16
+    line        go to state 17
+    assignment  go to state 18
+    chdir       go to state 19
+    cmd         go to state 20
+
+
+State 1
+
+   16 oneline: error . eoln
+
+    EOLN       shift, and go to state 2
+    SEMICOLON  shift, and go to state 4
+
+    eoln  go to state 21
+
+
+State 2
+
+   17 eoln: EOLN .
+
+    $default  reduce using rule 17 (eoln)
+
+
+State 3
+
+   28 chdir: CD .
+   29      | CD . WORD
+   30      | CD . WORD args
+
+    WORD  shift, and go to state 22
+
+    $default  reduce using rule 28 (chdir)
+
+
+State 4
+
+   18 eoln: SEMICOLON . EOLN
+   19     | SEMICOLON .
+
+    EOLN  shift, and go to state 23
+
+    EOLN      [reduce using rule 19 (eoln)]
+    $default  reduce using rule 19 (eoln)
+
+
+State 5
+
+    7 forloop: FOR . WORD IN loopargs eoln DO eoln metacmdlist DONE eoln
+
+    WORD  shift, and go to state 24
+
+
+State 6
+
+    8 whileloop: WHILE . metacmdlist DO eoln metacmdlist DONE eoln
+
+    FOR        shift, and go to state 5
+    WHILE      shift, and go to state 6
+    WORD       shift, and go to state 8
+    VAR        shift, and go to state 9
+    VAREXPAND  shift, and go to state 10
+
+    $default  reduce using rule 32 (metacmdlist)
+
+    forloop      go to state 25
+    whileloop    go to state 26
+    assignment   go to state 27
+    metacmdlist  go to state 28
+    metacmd      go to state 29
+    cmd          go to state 30
+
+
+State 7
+
+   12 oneline: EXPORT . args variable $@1 eoln
+
+    WORD  shift, and go to state 31
+
+    WORD      [reduce using rule 42 (args)]
+    $default  reduce using rule 42 (args)
+
+    args  go to state 32
+    arg   go to state 33
+
+
+State 8
+
+   37 cmd: WORD . args optredir
+   38    | WORD . args optredir cmd
+
+    WORD  shift, and go to state 31
+
+    WORD      [reduce using rule 42 (args)]
+    $default  reduce using rule 42 (args)
+
+    args  go to state 34
+    arg   go to state 33
+
+
+State 9
+
+   24 assignment: VAR .
+   26           | VAR . args
+
+    WORD  shift, and go to state 31
+
+    EOLN       reduce using rule 24 (assignment)
+    EOLN       [reduce using rule 42 (args)]
+    SEMICOLON  reduce using rule 24 (assignment)
+    SEMICOLON  [reduce using rule 42 (args)]
+    $default   reduce using rule 24 (assignment)
+
+    args  go to state 35
+    arg   go to state 33
+
+
+State 10
+
+   25 assignment: VAREXPAND .
+   27           | VAREXPAND . args
+
+    WORD  shift, and go to state 31
+
+    EOLN       reduce using rule 25 (assignment)
+    EOLN       [reduce using rule 42 (args)]
+    SEMICOLON  reduce using rule 25 (assignment)
+    SEMICOLON  [reduce using rule 42 (args)]
+    $default   reduce using rule 25 (assignment)
+
+    args  go to state 36
+    arg   go to state 33
+
+
+State 11
+
+    0 $accept: input . $end
+
+    $end  shift, and go to state 37
+
+
+State 12
+
+    1 input: lines .
+
+    $default  reduce using rule 1 (input)
+
+
+State 13
+
+    4 lines: forloop . lines
+
+    error      shift, and go to state 1
+    EOLN       shift, and go to state 2
+    CD         shift, and go to state 3
+    SEMICOLON  shift, and go to state 4
+    FOR        shift, and go to state 5
+    WHILE      shift, and go to state 6
+    EXPORT     shift, and go to state 7
+    WORD       shift, and go to state 8
+    VAR        shift, and go to state 9
+    VAREXPAND  shift, and go to state 10
+
+    $end  reduce using rule 6 (lines)
+
+    lines       go to state 38
+    forloop     go to state 13
+    whileloop   go to state 14
+    oneline     go to state 15
+    eoln        go to state 16
+    line        go to state 17
+    assignment  go to state 18
+    chdir       go to state 19
+    cmd         go to state 20
+
+
+State 14
+
+    5 lines: whileloop . lines
+
+    error      shift, and go to state 1
+    EOLN       shift, and go to state 2
+    CD         shift, and go to state 3
+    SEMICOLON  shift, and go to state 4
+    FOR        shift, and go to state 5
+    WHILE      shift, and go to state 6
+    EXPORT     shift, and go to state 7
+    WORD       shift, and go to state 8
+    VAR        shift, and go to state 9
+    VAREXPAND  shift, and go to state 10
+
+    $end  reduce using rule 6 (lines)
+
+    lines       go to state 39
+    forloop     go to state 13
+    whileloop   go to state 14
+    oneline     go to state 15
+    eoln        go to state 16
+    line        go to state 17
+    assignment  go to state 18
+    chdir       go to state 19
+    cmd         go to state 20
+
+
+State 15
+
+    3 lines: oneline . lines
+
+    error      shift, and go to state 1
+    EOLN       shift, and go to state 2
+    CD         shift, and go to state 3
+    SEMICOLON  shift, and go to state 4
+    FOR        shift, and go to state 5
+    WHILE      shift, and go to state 6
+    EXPORT     shift, and go to state 7
+    WORD       shift, and go to state 8
+    VAR        shift, and go to state 9
+    VAREXPAND  shift, and go to state 10
+
+    $end  reduce using rule 6 (lines)
+
+    lines       go to state 40
+    forloop     go to state 13
+    whileloop   go to state 14
+    oneline     go to state 15
+    eoln        go to state 16
+    line        go to state 17
+    assignment  go to state 18
+    chdir       go to state 19
+    cmd         go to state 20
+
+
+State 16
+
+   15 oneline: eoln .
+
+    $default  reduce using rule 15 (oneline)
+
+
+State 17
+
+   14 oneline: line . $@2 eoln
+
+    $default  reduce using rule 13 ($@2)
+
+    $@2  go to state 41
+
+
+State 18
+
+   10 oneline: assignment . eoln
+
+    EOLN       shift, and go to state 2
+    SEMICOLON  shift, and go to state 4
+
+    eoln  go to state 42
+
+
+State 19
+
+    9 oneline: chdir . eoln
+
+    EOLN       shift, and go to state 2
+    SEMICOLON  shift, and go to state 4
+
+    eoln  go to state 43
+
+
+State 20
+
+   20 line: cmd .
+   21     | cmd . PIPE line
+
+    PIPE  shift, and go to state 44
+
+    $default  reduce using rule 20 (line)
+
+
+State 21
+
+   16 oneline: error eoln .
+
+    $default  reduce using rule 16 (oneline)
+
+
+State 22
+
+   29 chdir: CD WORD .
+   30      | CD WORD . args
+
+    WORD  shift, and go to state 31
+
+    EOLN       reduce using rule 29 (chdir)
+    EOLN       [reduce using rule 42 (args)]
+    SEMICOLON  reduce using rule 29 (chdir)
+    SEMICOLON  [reduce using rule 42 (args)]
+    $default   reduce using rule 29 (chdir)
+
+    args  go to state 45
+    arg   go to state 33
+
+
+State 23
+
+   18 eoln: SEMICOLON EOLN .
+
+    $default  reduce using rule 18 (eoln)
+
+
+State 24
+
+    7 forloop: FOR WORD . IN loopargs eoln DO eoln metacmdlist DONE eoln
+
+    IN  shift, and go to state 46
+
+
+State 25
+
+   35 metacmd: forloop .
+
+    $default  reduce using rule 35 (metacmd)
+
+
+State 26
+
+   34 metacmd: whileloop .
+
+    $default  reduce using rule 34 (metacmd)
+
+
+State 27
+
+   36 metacmd: assignment .
+
+    $default  reduce using rule 36 (metacmd)
+
+
+State 28
+
+    8 whileloop: WHILE metacmdlist . DO eoln metacmdlist DONE eoln
+
+    DO  shift, and go to state 47
+
+
+State 29
+
+   31 metacmdlist: metacmd . eoln metacmdlist
+
+    EOLN       shift, and go to state 2
+    SEMICOLON  shift, and go to state 4
+
+    eoln  go to state 48
+
+
+State 30
+
+   33 metacmd: cmd .
+
+    $default  reduce using rule 33 (metacmd)
+
+
+State 31
+
+   43 arg: WORD .
+
+    $default  reduce using rule 43 (arg)
+
+
+State 32
+
+   12 oneline: EXPORT args . variable $@1 eoln
+
+    WORD       shift, and go to state 49
+    VAR        shift, and go to state 9
+    VAREXPAND  shift, and go to state 10
+
+    variable    go to state 50
+    assignment  go to state 51
+
+
+State 33
+
+   41 args: arg . args
+
+    WORD  shift, and go to state 31
+
+    WORD      [reduce using rule 42 (args)]
+    $default  reduce using rule 42 (args)
+
+    args  go to state 52
+    arg   go to state 33
+
+
+State 34
+
+   37 cmd: WORD args . optredir
+   38    | WORD args . optredir cmd
+
+    INPUT          shift, and go to state 53
+    OUTPUT         shift, and go to state 54
+    OUTPUT_APPEND  shift, and go to state 55
+    ERROUT         shift, and go to state 56
+    ERROUT_APPEND  shift, and go to state 57
+
+    $default  reduce using rule 49 (optredir)
+
+    optredir  go to state 58
+
+
+State 35
+
+   26 assignment: VAR args .
+
+    $default  reduce using rule 26 (assignment)
+
+
+State 36
+
+   27 assignment: VAREXPAND args .
+
+    $default  reduce using rule 27 (assignment)
+
+
+State 37
+
+    0 $accept: input $end .
+
+    $default  accept
+
+
+State 38
+
+    4 lines: forloop lines .
+
+    $default  reduce using rule 4 (lines)
+
+
+State 39
+
+    5 lines: whileloop lines .
+
+    $default  reduce using rule 5 (lines)
+
+
+State 40
+
+    3 lines: oneline lines .
+
+    $default  reduce using rule 3 (lines)
+
+
+State 41
+
+   14 oneline: line $@2 . eoln
+
+    EOLN       shift, and go to state 2
+    SEMICOLON  shift, and go to state 4
+
+    eoln  go to state 59
+
+
+State 42
+
+   10 oneline: assignment eoln .
+
+    $default  reduce using rule 10 (oneline)
+
+
+State 43
+
+    9 oneline: chdir eoln .
+
+    $default  reduce using rule 9 (oneline)
+
+
+State 44
+
+   21 line: cmd PIPE . line
+
+    WORD  shift, and go to state 8
+
+    line  go to state 60
+    cmd   go to state 20
+
+
+State 45
+
+   30 chdir: CD WORD args .
+
+    $default  reduce using rule 30 (chdir)
+
+
+State 46
+
+    7 forloop: FOR WORD IN . loopargs eoln DO eoln metacmdlist DONE eoln
+
+    WORD  shift, and go to state 31
+
+    loopargs  go to state 61
+    arg       go to state 62
+
+
+State 47
+
+    8 whileloop: WHILE metacmdlist DO . eoln metacmdlist DONE eoln
+
+    EOLN       shift, and go to state 2
+    SEMICOLON  shift, and go to state 4
+
+    eoln  go to state 63
+
+
+State 48
+
+   31 metacmdlist: metacmd eoln . metacmdlist
+
+    FOR        shift, and go to state 5
+    WHILE      shift, and go to state 6
+    WORD       shift, and go to state 8
+    VAR        shift, and go to state 9
+    VAREXPAND  shift, and go to state 10
+
+    $default  reduce using rule 32 (metacmdlist)
+
+    forloop      go to state 25
+    whileloop    go to state 26
+    assignment   go to state 27
+    metacmdlist  go to state 64
+    metacmd      go to state 29
+    cmd          go to state 30
+
+
+State 49
+
+   22 variable: WORD .
+
+    $default  reduce using rule 22 (variable)
+
+
+State 50
+
+   12 oneline: EXPORT args variable . $@1 eoln
+
+    $default  reduce using rule 11 ($@1)
+
+    $@1  go to state 65
+
+
+State 51
+
+   23 variable: assignment .
+
+    $default  reduce using rule 23 (variable)
+
+
+State 52
+
+   41 args: arg args .
+
+    $default  reduce using rule 41 (args)
+
+
+State 53
+
+   44 optredir: INPUT . WORD optredir
+
+    WORD  shift, and go to state 66
+
+
+State 54
+
+   45 optredir: OUTPUT . WORD optredir
+
+    WORD  shift, and go to state 67
+
+
+State 55
+
+   46 optredir: OUTPUT_APPEND . WORD optredir
+
+    WORD  shift, and go to state 68
+
+
+State 56
+
+   47 optredir: ERROUT . WORD optredir
+
+    WORD  shift, and go to state 69
+
+
+State 57
+
+   48 optredir: ERROUT_APPEND . WORD optredir
+
+    WORD  shift, and go to state 70
+
+
+State 58
+
+   37 cmd: WORD args optredir .
+   38    | WORD args optredir . cmd
+
+    WORD  shift, and go to state 8
+
+    $default  reduce using rule 37 (cmd)
+
+    cmd  go to state 71
+
+
+State 59
+
+   14 oneline: line $@2 eoln .
+
+    $default  reduce using rule 14 (oneline)
+
+
+State 60
+
+   21 line: cmd PIPE line .
+
+    $default  reduce using rule 21 (line)
+
+
+State 61
+
+    7 forloop: FOR WORD IN loopargs . eoln DO eoln metacmdlist DONE eoln
+
+    EOLN       shift, and go to state 2
+    SEMICOLON  shift, and go to state 4
+
+    eoln  go to state 72
+
+
+State 62
+
+   39 loopargs: arg . loopargs
+   40         | arg .
+
+    WORD  shift, and go to state 31
+
+    $default  reduce using rule 40 (loopargs)
+
+    loopargs  go to state 73
+    arg       go to state 62
+
+
+State 63
+
+    8 whileloop: WHILE metacmdlist DO eoln . metacmdlist DONE eoln
+
+    FOR        shift, and go to state 5
+    WHILE      shift, and go to state 6
+    WORD       shift, and go to state 8
+    VAR        shift, and go to state 9
+    VAREXPAND  shift, and go to state 10
+
+    $default  reduce using rule 32 (metacmdlist)
+
+    forloop      go to state 25
+    whileloop    go to state 26
+    assignment   go to state 27
+    metacmdlist  go to state 74
+    metacmd      go to state 29
+    cmd          go to state 30
+
+
+State 64
+
+   31 metacmdlist: metacmd eoln metacmdlist .
+
+    $default  reduce using rule 31 (metacmdlist)
+
+
+State 65
+
+   12 oneline: EXPORT args variable $@1 . eoln
+
+    EOLN       shift, and go to state 2
+    SEMICOLON  shift, and go to state 4
+
+    eoln  go to state 75
+
+
+State 66
+
+   44 optredir: INPUT WORD . optredir
+
+    INPUT          shift, and go to state 53
+    OUTPUT         shift, and go to state 54
+    OUTPUT_APPEND  shift, and go to state 55
+    ERROUT         shift, and go to state 56
+    ERROUT_APPEND  shift, and go to state 57
+
+    $default  reduce using rule 49 (optredir)
+
+    optredir  go to state 76
+
+
+State 67
+
+   45 optredir: OUTPUT WORD . optredir
+
+    INPUT          shift, and go to state 53
+    OUTPUT         shift, and go to state 54
+    OUTPUT_APPEND  shift, and go to state 55
+    ERROUT         shift, and go to state 56
+    ERROUT_APPEND  shift, and go to state 57
+
+    $default  reduce using rule 49 (optredir)
+
+    optredir  go to state 77
+
+
+State 68
+
+   46 optredir: OUTPUT_APPEND WORD . optredir
+
+    INPUT          shift, and go to state 53
+    OUTPUT         shift, and go to state 54
+    OUTPUT_APPEND  shift, and go to state 55
+    ERROUT         shift, and go to state 56
+    ERROUT_APPEND  shift, and go to state 57
+
+    $default  reduce using rule 49 (optredir)
+
+    optredir  go to state 78
+
+
+State 69
+
+   47 optredir: ERROUT WORD . optredir
+
+    INPUT          shift, and go to state 53
+    OUTPUT         shift, and go to state 54
+    OUTPUT_APPEND  shift, and go to state 55
+    ERROUT         shift, and go to state 56
+    ERROUT_APPEND  shift, and go to state 57
+
+    $default  reduce using rule 49 (optredir)
+
+    optredir  go to state 79
+
+
+State 70
+
+   48 optredir: ERROUT_APPEND WORD . optredir
+
+    INPUT          shift, and go to state 53
+    OUTPUT         shift, and go to state 54
+    OUTPUT_APPEND  shift, and go to state 55
+    ERROUT         shift, and go to state 56
+    ERROUT_APPEND  shift, and go to state 57
+
+    $default  reduce using rule 49 (optredir)
+
+    optredir  go to state 80
+
+
+State 71
+
+   38 cmd: WORD args optredir cmd .
+
+    $default  reduce using rule 38 (cmd)
+
+
+State 72
+
+    7 forloop: FOR WORD IN loopargs eoln . DO eoln metacmdlist DONE eoln
+
+    DO  shift, and go to state 81
+
+
+State 73
+
+   39 loopargs: arg loopargs .
+
+    $default  reduce using rule 39 (loopargs)
+
+
+State 74
+
+    8 whileloop: WHILE metacmdlist DO eoln metacmdlist . DONE eoln
+
+    DONE  shift, and go to state 82
+
+
+State 75
+
+   12 oneline: EXPORT args variable $@1 eoln .
+
+    $default  reduce using rule 12 (oneline)
+
+
+State 76
+
+   44 optredir: INPUT WORD optredir .
+
+    $default  reduce using rule 44 (optredir)
+
+
+State 77
+
+   45 optredir: OUTPUT WORD optredir .
+
+    $default  reduce using rule 45 (optredir)
+
+
+State 78
+
+   46 optredir: OUTPUT_APPEND WORD optredir .
+
+    $default  reduce using rule 46 (optredir)
+
+
+State 79
+
+   47 optredir: ERROUT WORD optredir .
+
+    $default  reduce using rule 47 (optredir)
+
+
+State 80
+
+   48 optredir: ERROUT_APPEND WORD optredir .
+
+    $default  reduce using rule 48 (optredir)
+
+
+State 81
+
+    7 forloop: FOR WORD IN loopargs eoln DO . eoln metacmdlist DONE eoln
+
+    EOLN       shift, and go to state 2
+    SEMICOLON  shift, and go to state 4
+
+    eoln  go to state 83
+
+
+State 82
+
+    8 whileloop: WHILE metacmdlist DO eoln metacmdlist DONE . eoln
+
+    EOLN       shift, and go to state 2
+    SEMICOLON  shift, and go to state 4
+
+    eoln  go to state 84
+
+
+State 83
+
+    7 forloop: FOR WORD IN loopargs eoln DO eoln . metacmdlist DONE eoln
+
+    FOR        shift, and go to state 5
+    WHILE      shift, and go to state 6
+    WORD       shift, and go to state 8
+    VAR        shift, and go to state 9
+    VAREXPAND  shift, and go to state 10
+
+    $default  reduce using rule 32 (metacmdlist)
+
+    forloop      go to state 25
+    whileloop    go to state 26
+    assignment   go to state 27
+    metacmdlist  go to state 85
+    metacmd      go to state 29
+    cmd          go to state 30
+
+
+State 84
+
+    8 whileloop: WHILE metacmdlist DO eoln metacmdlist DONE eoln .
+
+    $default  reduce using rule 8 (whileloop)
+
+
+State 85
+
+    7 forloop: FOR WORD IN loopargs eoln DO eoln metacmdlist . DONE eoln
+
+    DONE  shift, and go to state 86
+
+
+State 86
+
+    7 forloop: FOR WORD IN loopargs eoln DO eoln metacmdlist DONE . eoln
+
+    EOLN       shift, and go to state 2
+    SEMICOLON  shift, and go to state 4
+
+    eoln  go to state 87
+
+
+State 87
+
+    7 forloop: FOR WORD IN loopargs eoln DO eoln metacmdlist DONE eoln .
+
+    $default  reduce using rule 7 (forloop)

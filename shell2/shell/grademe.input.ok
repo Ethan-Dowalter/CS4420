@@ -1,0 +1,19 @@
+Wed_Sep_22_15:31:49_EDT_2021
+
+echo
+wc testing 1 2 3
+cat a b c d e f g h i j k l m n o p q r s t u v w x y z
+/bin/cc "this is all one word"
+/bin/ls "What about"this string"of stuff?"
+"command names can be quoted, of course" /etc/motd
+"/bin/ls" "/tmp"
+echo "Blank lines should work!"
+
+./!@#$%^*()_+-=\`~[{];:',./? "this command name is legal!!!"
+echo "test harder strings" "||<<>>||>&>&"
+
+echo "Pipe test"
+a|b|c|d
+echo test | a | b | c 1 2 3 | d
+c1 <i 2>e1 | c2 2>e2 | c3 2>e3 | c4 2>e4 >> O
+grep foo </tmp/foo.input | sort | more 2>> ~/More.out
